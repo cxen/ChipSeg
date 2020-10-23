@@ -178,10 +178,10 @@ end
 Img = imadjust(Image_temp2);
 
 %CUSTOM PARAMETER
-% filter_size = 3;
-% morphology_size =12;
-filter_size = 5;
-morphology_size =25;
+filter_size = 3;
+morphology_size =12;
+% filter_size = 5;
+% morphology_size =25;
 %---------------
 
 % filtering functions:
@@ -190,12 +190,13 @@ BW1 = uint16(Img);
 I = BW1;
 I2 = adapthisteq(I);
 BW2 = imbinarize(I2);
-% BW3 = imdilate(BW2, strel('disk',morphology_size));
-% BW4 = imfill(BW3,'holes');
-% BW = imerode(BW4,strel('disk',morphology_size));
-BW4 = BW2;
-BW = imerode(BW4,strel('disk',filter_size));
-BWfinal = imdilate(BW, strel('disk',morphology_size));
+BW3 = imdilate(BW2, strel('disk',morphology_size));
+BW4 = imfill(BW3,'holes');
+BWfinal = imerode(BW4,strel('disk',morphology_size));
+
+% BW4 = BW2;
+% BW = imerode(BW4,strel('disk',filter_size));
+% BWfinal = imdilate(BW, strel('disk',morphology_size));
 
 if (numel(find(BWfinal))/numel(BWfinal)>=.95)
     BWfinal = ones(size(Image));
