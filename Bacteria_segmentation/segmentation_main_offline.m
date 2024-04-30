@@ -21,7 +21,7 @@ plot_results =1; % If the user wants to plot results
 make_movie = 1; % If the user wants to generate a movie 
 
 %% This is the path where the raw images are located
-path='D:\Utenti\Irene\Desktop\Bacteria segmentation data\Raw images\Mark_and_Find_001\';
+path='/Volumes/MicaliLab/Constantinos/Instrument data/Microscope DMi8/Experiment data/20240307/Tiff/';
 
 %% Load images 
 %Position001 and *C00 are the strings associated to the name of images the
@@ -29,11 +29,11 @@ path='D:\Utenti\Irene\Desktop\Bacteria segmentation data\Raw images\Mark_and_Fin
 %from the microscope. The extension should be changed if needed.
 
 % %%%Loading all the phase contrast data
-PhContrast = dir(strcat(path,'Position001','*C00.tif'));
+PhContrast = dir(strcat(path,'20240307_Prot-Aux+Aux-Aux_Cm4uM_Pos1_1-281_p.tiff'));
 PhContrast = table2struct(sortrows(struct2table(PhContrast),{'name'},{'ascend'}));
 
 %Loading the green field data 
-GreenField = dir(strcat(path,'Position001','*C01.tif'));
+GreenField = dir(strcat(path,'20240307_Prot-Aux+Aux-Aux_Cm4uM_Pos1_1-281_g.tiff'));
 GreenField = table2struct(sortrows(struct2table(GreenField),{'name'},{'ascend'}));
 
 %% Cropping the zone of the image we want to segment
@@ -102,7 +102,7 @@ if calculate_fluorescence %If the user wants to compute the fluorecence
         ImageInput = imcrop(imread(strcat(path,GreenField(i).name)),rectInput); %Cropping the image  for the background 
         [cell_fluorescenceInit(i).val,background_fluorescence(i), cell_fluorescenceInit(i).average, cell_fluorescenceInit(i).std_dev,L] = fluorescence_eval_GF_Init(image,ImageInput,cell_masks(i).mask); %Computing the cell fluorecence with respect to the background
         %Threshold variables
-        a=cell2mat({L([1:length(L)]).MeanIntensity}); 
+        a=cell2mat({L(1:length(L)).MeanIntensity}); 
         b = max(a);
         Obj_Fluo  = [Obj_Fluo;b];
         clc;
@@ -110,7 +110,7 @@ if calculate_fluorescence %If the user wants to compute the fluorecence
     
 end
 
-av_fluoInit=cell2mat({cell_fluorescenceInit([1:length(cell_fluorescenceInit)]).average});
+av_fluoInit=cell2mat({cell_fluorescenceInit(1:length(cell_fluorescenceInit)).average});
 
 %% [numbPreInitpics+1:numbPreInitpics+numbinitpics] define the set of images used to calculated the threshold. 
 th = max(Obj_Fluo(numbPreInitpics+1:numbPreInitpics+numbinitpics));  %Evalutating the threshold (cells brighter than this value are not taken into account in the evaluation of the fluo)
@@ -131,9 +131,9 @@ if calculate_fluorescence          % If the user wants to compute the fluorescen
         clc;
     end
 end
-  av_fluo=cell2mat({cell_fluorescence([1:length(cell_fluorescence)]).average}); %Average fluorescence of all cells
-  stdav_fluo=cell2mat({cell_fluorescence([1:length(cell_fluorescence)]).std_dev}); %Standard deviation of the fluorescence
-  med_fluo=cell2mat({cell_fluorescence([1:length(cell_fluorescence)]).median}); %Median value of the fluorescence
+  av_fluo=cell2mat({cell_fluorescence(1:length(cell_fluorescence)).average}); %Average fluorescence of all cells
+  stdav_fluo=cell2mat({cell_fluorescence(1:length(cell_fluorescence)).std_dev}); %Standard deviation of the fluorescence
+  med_fluo=cell2mat({cell_fluorescence(1:length(cell_fluorescence)).median}); %Median value of the fluorescence
   
 %% Making a video to visualise the fluorescence output in the microfluidic device
 if make_movie&&calculate_fluorescence   

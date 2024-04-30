@@ -10,8 +10,8 @@ background_fluorescence =  mean(mean(ImageInput(ImageInput~=0)));
 
 CC = bwconncomp(mask,4);
 L = regionprops(CC,image,'pixelidxlist','MeanIntensity','Centroid','Area');
-idx = find([L.MeanIntensity]<=th);
-idy = find([L.MeanIntensity]>th);
+idx = [L.MeanIntensity]<=th;
+idy = [L.MeanIntensity]>th;
 LLL =L(idy);
 
 LL=L(idx);
